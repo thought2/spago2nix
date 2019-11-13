@@ -20,6 +20,7 @@ import Effect.Class.Console (error, log)
 import Node.ChildProcess as CP
 import Node.Encoding (Encoding(..))
 import Node.FS.Aff as FS
+import Partial.Unsafe (unsafeCrashWith)
 import Simple.JSON as JSON
 import Simple.JSON.Utils (printMultipleErrors)
 import Sunde as S
@@ -195,9 +196,9 @@ replace :: { from :: String, to :: String } -> String -> String
 replace { from, to } = String.replaceAll (String.Pattern from) (String.Replacement to)
 
 printResult :: FetchResult -> String
-printResult (CantFetchLocal { packageName, repo })
+printResult (CantFetchLocal { packageName, repo : Local path })
     = replace { from: "PKGNAME", to: packageName }
-  <<< replace { from: "PATH", to: show repo }
+  <<< replace { from: "PATH", to: path }
     $ """
     "PKGNAME" = pkgs.stdenv.mkDerivation {
         name = "PKGNAME";
@@ -206,6 +207,8 @@ printResult (CantFetchLocal { packageName, repo })
         installPhase = "ln -s $src $out";
       };
 """
+printResult (CantFetchLocal { packageName, repo : Remote _ })
+  = unsafeCrashWith "impossible state"
 printResult (Fetched
   { package: { packageName, version: Version version }
   , result: { url: URL url, rev: Revision rev, sha256: SHA256 sha256 }
