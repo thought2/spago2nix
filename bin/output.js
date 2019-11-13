@@ -7660,6 +7660,7 @@ var PS = {};
   var Node_ChildProcess = $PS["Node.ChildProcess"];
   var Node_Encoding = $PS["Node.Encoding"];
   var Node_FS_Aff = $PS["Node.FS.Aff"];
+  var Partial_Unsafe = $PS["Partial.Unsafe"];
   var Simple_JSON = $PS["Simple.JSON"];
   var Simple_JSON_Utils = $PS["Simple.JSON.Utils"];
   var Sunde = $PS["Sunde"];
@@ -7683,9 +7684,9 @@ var PS = {};
   // }
   var spagoListPackages = function (mSpagoArgs) {
       var words = (function () {
-          var $69 = Data_String_Common.split("\x0a");
-          return function ($70) {
-              return $69(Data_String_Common.trim($70));
+          var $76 = Data_String_Common.split("\x0a");
+          return function ($77) {
+              return $76(Data_String_Common.trim($77));
           };
       })();
       var spagoArgs = Data_Maybe.maybe([  ])(unSpagoArgs)(mSpagoArgs);
@@ -7713,14 +7714,17 @@ var PS = {};
       return Data_String_Common.replaceAll(v.from)(v.to);
   };
   var printResult = function (v) {
-      if (v instanceof Core.CantFetchLocal) {
+      if (v instanceof Core.CantFetchLocal && v.value0.repo instanceof Core.Local) {
           return replace({
               from: "PKGNAME",
               to: v.value0.packageName
           })(replace({
               from: "PATH",
-              to: Data_Show.show(Core.showRepo)(v.value0.repo)
+              to: v.value0.repo.value0
           })("\x0a    \"PKGNAME\" = pkgs.stdenv.mkDerivation {\x0a        name = \"PKGNAME\";\x0a        src = PATH;\x0a        phases = \"installPhase\";\x0a        installPhase = \"ln -s $src $out\";\x0a      };\x0a"));
+      };
+      if (v instanceof Core.CantFetchLocal && v.value0.repo instanceof Core.Remote) {
+          return Partial_Unsafe.unsafeCrashWith("impossible state");
       };
       if (v instanceof Core.Fetched) {
           return replace({
@@ -7740,7 +7744,7 @@ var PS = {};
               to: v.value0.result.sha256
           })("\x0a    \"PKGNAME\" = pkgs.stdenv.mkDerivation {\x0a        name = \"PKGNAME\";\x0a        version = \"VERSION\";\x0a        src = pkgs.fetchgit {\x0a          url = \"URL\";\x0a          rev = \"REV\";\x0a          sha256 = \"SHA256\";\x0a        };\x0a        phases = \"installPhase\";\x0a        installPhase = \"ln -s $src $out\";\x0a      };\x0a")))));
       };
-      throw new Error("Failed pattern match at Generate (line 197, column 1 - line 197, column 37): " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Generate (line 204, column 1 - line 204, column 37): " + [ v.constructor.name ]);
   };
   var printResults = function (xs) {
       var inputs = Data_Foldable.foldMap(Data_Foldable.foldableArray)(Data_Monoid.monoidString)(printResult)(xs);
@@ -7853,10 +7857,10 @@ var PS = {};
                       if (v1 instanceof Data_Either.Left) {
                           return Control_Monad_Error_Class.throwError(Control_Monad_Except_Trans.monadThrowExceptT(Effect_Aff.monadAff))(new Core.NixPrefetchGitOutputDeformed(Simple_JSON_Utils.printMultipleErrors(v1.value0)));
                       };
-                      throw new Error("Failed pattern match at Generate (line 84, column 37 - line 86, column 88): " + [ v1.constructor.name ]);
-                  })())(function (v1) {
-                      var $52 = Data_Eq.eq(Core.eqSHA)(v1.sha256)(brokenRepoSHA);
-                      if ($52) {
+                      throw new Error("Failed pattern match at Generate (line 83, column 37 - line 85, column 88): " + [ v3.constructor.name ]);
+                  })())(function (v3) {
+                      var $53 = Data_Eq.eq(Core.eqSHA)(v3.sha256)(brokenRepoSHA);
+                      if ($53) {
                           return Control_Monad_Error_Class.throwError(Control_Monad_Except_Trans.monadThrowExceptT(Effect_Aff.monadAff))(new Core.MissingRevOrRepoResult(Data_Show.show(Data_Show.showRecord()(Data_Show.showRecordFieldsCons(new Data_Symbol.IsSymbol(function () {
                               return "packageName";
                           }))(Data_Show.showRecordFieldsCons(new Data_Symbol.IsSymbol(function () {
@@ -7873,7 +7877,7 @@ var PS = {};
               });
           }));
       };
-      throw new Error("Failed pattern match at Generate (line 69, column 1 - line 69, column 60): " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Generate (line 67, column 1 - line 67, column 60): " + [ v.constructor.name ]);
   };
   var ensureFetchPackage = function (p) {
       var path = mkPrefetchPath(p);
@@ -7888,7 +7892,7 @@ var PS = {};
                       if (v instanceof Data_Either.Left) {
                           return Control_Applicative.pure(Effect_Aff.applicativeAff)(Data_Either.Left.create(new Core.FileContentsCorrupted(p, path, Simple_JSON_Utils.printMultipleErrors(v.value0))));
                       };
-                      throw new Error("Failed pattern match at Generate (line 99, column 7 - line 101, column 85): " + [ v.constructor.name ]);
+                      throw new Error("Failed pattern match at Generate (line 98, column 7 - line 100, column 85): " + [ v2.constructor.name ]);
                   });
               });
           };
@@ -7902,7 +7906,7 @@ var PS = {};
                           return Control_Applicative.pure(Effect_Aff.applicativeAff)(result);
                       });
                   };
-                  throw new Error("Failed pattern match at Generate (line 105, column 7 - line 109, column 22): " + [ result.constructor.name ]);
+                  throw new Error("Failed pattern match at Generate (line 104, column 7 - line 108, column 22): " + [ v1.constructor.name ]);
               });
           });
       });
@@ -7951,7 +7955,7 @@ var PS = {};
                       throw new Error("Failed pattern match at Generate (line 247, column 3 - line 255, column 13): " + [ fetches.constructor.name ]);
                   });
               };
-              throw new Error("Failed pattern match at Generate (line 264, column 7 - line 268, column 17): " + [ v.constructor.name ]);
+              throw new Error("Failed pattern match at Generate (line 267, column 7 - line 271, column 17): " + [ v.constructor.name ]);
           });
       };
       return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(ensureSetup)(function () {
@@ -7960,10 +7964,10 @@ var PS = {};
                   if (v1 instanceof Data_Either.Left) {
                       return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.error(Effect_Aff.monadEffectAff)("errors from fetching packages:"))(function () {
                           return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Data_Foldable.traverse_(Effect_Aff.applicativeAff)(Data_Foldable.foldableArray)((function () {
-                              var $73 = Effect_Class_Console.error(Effect_Aff.monadEffectAff);
-                              var $74 = Data_Show.show(Core.showMyError);
-                              return function ($75) {
-                                  return $73($74($75));
+                              var $78 = Effect_Class_Console.error(Effect_Aff.monadEffectAff);
+                              var $79 = Data_Show.show(Core.showMyError);
+                              return function ($80) {
+                                  return $78($79($80));
                               };
                           })())(v1.value0))(function () {
                               return Core.exit(1);
@@ -7977,7 +7981,7 @@ var PS = {};
                           });
                       });
                   };
-                  throw new Error("Failed pattern match at Generate (line 247, column 3 - line 255, column 13): " + [ v1.constructor.name ]);
+                  throw new Error("Failed pattern match at Generate (line 250, column 3 - line 258, column 13): " + [ v1.constructor.name ]);
               });
           });
       };
