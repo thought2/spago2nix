@@ -8024,7 +8024,7 @@ var PS = {};
           })(replace({
               from: "PATH",
               to: v.value0.repo.value0
-          })("\x0a    \"PKGNAME\" = pkgs.stdenv.mkDerivation {\x0a        name = \"PKGNAME\";\x0a        src = PATH;\x0a        phases = \"installPhase\";\x0a        installPhase = \"ln -s $src $out\";\x0a      };\x0a"));
+          })("\x0a    \"PKGNAME\" = pkgs.stdenv.mkDerivation {\x0a        name = \"PKGNAME\";\x0a        version = \"local\";\x0a        src = PATH;\x0a        phases = \"installPhase\";\x0a        installPhase = \"ln -s $src $out\";\x0a      };\x0a"));
       };
       if (v instanceof Core.CantFetchLocal && v.value0.repo instanceof Core.Remote) {
           return Partial_Unsafe.unsafeCrashWith("impossible state");
@@ -8073,7 +8073,7 @@ var PS = {};
                   $tco_done = true;
                   return Data_Maybe.Nothing.value;
               };
-              throw new Error("Failed pattern match at Generate (line 287, column 5 - line 287, column 53): " + [ v.constructor.name ]);
+              throw new Error("Failed pattern match at Generate (line 288, column 5 - line 288, column 53): " + [ v.constructor.name ]);
           };
           while (!$tco_done) {
               $tco_result = $tco_loop($copy_v);
@@ -8124,7 +8124,7 @@ var PS = {};
               };
               return chunk$prime([  ])(v1);
           };
-          throw new Error("Failed pattern match at Generate (line 242, column 1 - line 242, column 53): " + [ v.constructor.name, v1.constructor.name ]);
+          throw new Error("Failed pattern match at Generate (line 243, column 1 - line 243, column 53): " + [ v.constructor.name, v1.constructor.name ]);
       };
   };
   var brokenRepoSHA = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
@@ -8227,7 +8227,7 @@ var PS = {};
                           return Core.exit(1);
                       });
                   };
-                  throw new Error("Failed pattern match at Generate (line 272, column 7 - line 276, column 17): " + [ result.constructor.name ]);
+                  throw new Error("Failed pattern match at Generate (line 273, column 7 - line 277, column 17): " + [ result.constructor.name ]);
               });
           };
           return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(ensureSetup)(function () {
@@ -8253,7 +8253,7 @@ var PS = {};
                               });
                           });
                       };
-                      throw new Error("Failed pattern match at Generate (line 255, column 3 - line 263, column 13): " + [ fetches.constructor.name ]);
+                      throw new Error("Failed pattern match at Generate (line 256, column 3 - line 264, column 13): " + [ fetches.constructor.name ]);
                   });
               });
           });

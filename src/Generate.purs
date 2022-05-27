@@ -202,6 +202,7 @@ printResult (CantFetchLocal { packageName, repo : Local path })
     $ """
     "PKGNAME" = pkgs.stdenv.mkDerivation {
         name = "PKGNAME";
+        version = "local";
         src = PATH;
         phases = "installPhase";
         installPhase = "ln -s $src $out";
